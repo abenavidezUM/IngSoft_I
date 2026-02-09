@@ -1,0 +1,204 @@
+<div class="mensajes-privados-container">
+  <!-- Vista: Lista de Conversaciones -->
+  <div *ngIf="vistaActual === 'lista'" class="conversaciones-lista">
+    <!-- Top Bar con Logo -->
+    <div class="top-bar">
+      <div class="logo-container">
+        <span class="tux-logo">🐧</span>
+        <span class="app-name">Microblogging</span>
+      </div>
+    </div>
+
+    <!-- Header Principal -->
+    <div class="header-principal">
+      <div class="header-left">
+        <div class="avatar-placeholder"></div>
+      </div>
+      <div class="header-center">
+        <h2>Mensajes Privados</h2>
+      </div>
+      <div class="header-right">
+        <span class="envelope-icon">✉</span>
+      </div>
+    </div>
+
+    <!-- Búsqueda de usuarios -->
+    <div class="busqueda-usuarios">
+      <form [formGroup]="searchForm">
+        <input 
+          #searchInput
+          type="text" 
+          formControlName="busqueda"
+          placeholder="Buscar"
+          class="input-busqueda"
+        />
+      </form>
+      
+      <!-- Resultados de búsqueda -->
+      <div *ngIf="usuariosBuscados.length > 0" class="resultados-busqueda">
+        <div 
+          *ngFor="let usuario of usuariosBuscados"
+          class="resultado-item"
+          (click)="seleccionarUsuario(usuario)"
+        >
+          <img 
+            [src]="usuario.fotoUsuario || 'assets/default-avatar.png'" 
+            [alt]="usuario.nickName"
+            class="avatar"
+          />
+          <div class="usuario-info">
+            <div class="nickname">{{ '@' + usuario.nickName }}</div>
+            <div class="nombre">{{ usuario.nombre }} {{ usuario.apellido }}</div>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="buscandoUsuarios" class="loading">Buscando...</div>
+    </div>
+
+    <!-- Lista de conversaciones -->
+    <div class="conversaciones" *ngIf="!cargandoConversaciones">
+      <div 
+        *ngFor="let conv of conversaciones"
+        class="conversacion-item"
+        (click)="abrirConversacion(conv.usuario)"
+      >
+        <div class="avatar-container">
+          <img 
+            [src]="conv.usuario.fotoUsuario || 'assets/default-avatar.png'" 
+            [alt]="conv.usuario.nickName"
+            class="avatar"
+          />
+          <span 
+            *ngIf="conv.mensajesNoLeidos > 0" 
+            class="badge-no-leidos"
+          >
+            {{ conv.mensajesNoLeidos }}
+          </span>
+        </div>
+        
+        <div class="conversacion-info">
+          <div class="header-conversacion">
+            <span class="nickname">{{ '@' + conv.usuario.nickName }}</span>
+            <span class="fecha">{{ formatearFecha(conv.ultimoMensaje.fechaDeCreado) }}</span>
+          </div>
+          <div class="ultimo-mensaje">
+            {{ conv.ultimoMensaje.texto }}
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="conversaciones.length === 0" class="empty-state">
+        <p>No tienes conversaciones aún</p>
+        <p>Busca un usuario para comenzar a chatear</p>
+      </div>
+    </div>
+
+    <div *ngIf="cargandoConversaciones" class="loading">
+      Cargando conversaciones...
+    </div>
+  </div>
+
+  <!-- Vista: Conversación Individual -->
+  <div *ngIf="vistaActual === 'conversacion' && usuarioSeleccionado" class="conversacion-detalle">
+    <!-- Header de conversación -->
+    <div class="header-conversacion">
+      <button class="btn-volver" (click)="volverALista()">
+        ← Volver
+      </button>
+      
+      <div class="usuario-header">
+        <img 
+          [src]="usuarioSeleccionado.fotoUsuario || 'assets/default-avatar.png'" 
+          [alt]="usuarioSeleccionado.nickName"
+          class="avatar"
+        />
+        <div class="usuario-info">
+          <div class="nickname">{{ '@' + usuarioSeleccionado.nickName }}</div>
+          <div class="nombre">{{ usuarioSeleccionado.nombre }} {{ usuarioSeleccionado.apellido }}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mensajes -->
+    <div #mensajesContainer class="mensajes-container">
+      <!-- Botón cargar más -->
+      <button 
+        *ngIf="hayMasMensajes && !cargandoMensajes"
+        class="btn-cargar-mas"
+        (click)="cargarMasMensajes()"
+      >
+        Cargar mensajes anteriores
+      </button>
+
+      <div *ngIf="cargandoMensajes && paginaActual === 0" class="loading">
+        Cargando mensajes...
+      </div>
+
+      <!-- Lista de mensajes -->
+      <div 
+        *ngFor="let mensaje of conversacionActual"
+        class="mensaje"
+        [ngClass]="obtenerClasesMensaje(mensaje, currentUserId)"
+      >
+        <div class="mensaje-content">
+          <p class="mensaje-texto">{{ mensaje.texto }}</p>
+          <div class="mensaje-footer">
+            <span class="fecha">{{ formatearFecha(mensaje.fechaDeCreado) }}</span>
+            <span 
+              *ngIf="mensaje.leido && mensaje.emisor.id === currentUserId" 
+              class="leido-icon"
+              title="Leído"
+            >
+              ✓✓
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="conversacionActual.length === 0 && !cargandoMensajes" class="empty-state">
+        <p>No hay mensajes en esta conversación</p>
+        <p>¡Sé el primero en escribir!</p>
+      </div>
+    </div>
+
+    <!-- Formulario de envío -->
+    <div class="form-envio">
+      <form [formGroup]="mensajeForm" (ngSubmit)="enviarMensaje()">
+        <div class="input-container">
+          <textarea
+            formControlName="texto"
+            placeholder="Escribe tu mensaje..."
+            class="input-mensaje"
+            rows="3"
+            maxlength="1000"
+          ></textarea>
+          
+          <div class="form-footer">
+            <span class="contador">
+              {{ longitudTexto }} / 1000
+            </span>
+            
+            <button 
+              type="submit"
+              class="btn-enviar"
+              [disabled]="!puedeEnviar"
+            >
+              {{ enviandoMensaje ? 'Enviando...' : 'Enviar' }}
+            </button>
+          </div>
+        </div>
+
+        <!-- Errores de validación -->
+        <div class="validation-errors" *ngIf="mensajeForm.get('texto')?.invalid && mensajeForm.get('texto')?.touched">
+          <p *ngIf="mensajeForm.get('texto')?.errors?.['required']">
+            El mensaje no puede estar vacío
+          </p>
+          <p *ngIf="mensajeForm.get('texto')?.errors?.['maxlength']">
+            El mensaje no puede exceder 1000 caracteres
+          </p>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

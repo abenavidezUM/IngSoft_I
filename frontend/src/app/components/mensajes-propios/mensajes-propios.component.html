@@ -1,0 +1,30 @@
+<section>
+  <div class="page-header">
+    <h2>Mensajes Propios</h2>
+    <p class="page-subtitle">CU0008 - Borrar Mensajes Propios</p>
+  </div>
+
+  <div *ngIf="mensajes.length === 0 && !cargando" class="empty">
+    No hay mensajes todavía.
+  </div>
+
+  <ul class="lista">
+    <li *ngFor="let mensaje of mensajes" class="mensaje-item">
+      <div class="mensaje-contenido">
+        <p class="texto">{{ mensaje.texto }}</p>
+        <span class="fecha">{{ mensaje.fechaDeCreado | date:'short' }}</span>
+      </div>
+      <button 
+        class="btn-borrar" 
+        (click)="borrarMensaje(mensaje.id)"
+        [disabled]="estaBoorrando(mensaje.id)"
+        title="Borrar mensaje">
+        {{ estaBoorrando(mensaje.id) ? 'Borrando...' : 'Borrar' }}
+      </button>
+    </li>
+  </ul>
+
+  <button *ngIf="hayMas" (click)="cargarMensajes()" [disabled]="cargando">
+    {{ cargando ? 'Cargando...' : 'Cargar más' }}
+  </button>
+</section>

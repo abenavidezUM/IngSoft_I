@@ -1,0 +1,166 @@
+.app-shell {
+  min-height: 100vh;
+  background: #fafafa;
+  color: #262626;
+  display: flex;
+  flex-direction: column;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+/* Top Bar */
+.top-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: white;
+  border-bottom: 1px solid #dbdbdb;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 20px;
+  z-index: 1000;
+}
+
+.logo-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo-icon {
+  width: 28px;
+  height: 28px;
+  color: #262626;
+}
+
+.app-name {
+  font-size: 18px;
+  font-weight: 600;
+  color: #262626;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  letter-spacing: -0.5px;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.user-icon {
+  width: 20px;
+  height: 20px;
+  color: #262626;
+}
+
+.user-name {
+  font-weight: 500;
+  color: #262626;
+  font-size: 14px;
+}
+
+.btn-logout {
+  background: transparent;
+  color: #262626;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.logout-icon {
+  width: 18px;
+  height: 18px;
+}
+
+.btn-logout:hover {
+  background: #fafafa;
+}
+
+.content {
+  flex: 1;
+  padding: 0;
+  min-height: calc(100vh - 80px);
+  overflow-y: auto;
+}
+
+.content.with-header {
+  margin-top: 56px;
+  min-height: calc(100vh - 136px);
+}
+
+/* Bottom Navigation Bar */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: white;
+  border-top: 1px solid #dbdbdb;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 12px 0;
+  z-index: 1000;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  color: #262626;
+  padding: 8px 16px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.nav-item .nav-icon {
+  width: 26px;
+  height: 26px;
+  color: #262626;
+  transition: all 0.2s ease;
+}
+
+.nav-item.active .nav-icon {
+  stroke-width: 2.5;
+  color: #262626;
+}
+
+.nav-item-center {
+  background: #C81D25;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  margin: -8px 0;
+  box-shadow: 0 4px 8px rgba(200, 29, 37, 0.3);
+}
+
+.nav-item-center .nav-icon-plus {
+  font-size: 32px;
+  color: #BFD7EA;
+  font-weight: bold;
+  line-height: 1;
+}
+
+.nav-item-center.active {
+  background: #C81D25;
+}
+
+.nav-item:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.nav-item-center:hover {
+  background: #a0161e;
+  transform: scale(1.05);
+}
+

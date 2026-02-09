@@ -1,0 +1,47 @@
+<div class="login-container">
+  <div class="login-card">
+    <div class="logo-container">
+      <svg class="logo" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="2" y="2" width="20" height="20" rx="5" stroke="currentColor" stroke-width="2"/>
+        <circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="2"/>
+        <circle cx="17.5" cy="6.5" r="1.5" fill="currentColor"/>
+      </svg>
+      <h1>Red Social</h1>
+    </div>
+    <p class="subtitle">Selecciona un usuario para demostrar los casos de uso</p>
+
+    <div class="form-group">
+      <label for="usuario">Usuario:</label>
+      <select 
+        id="usuario" 
+        [(ngModel)]="usuarioSeleccionado" 
+        class="form-control"
+        [disabled]="loading">
+        <option value="">-- Selecciona un usuario --</option>
+        <option *ngFor="let user of usuarios" [value]="user.nickName">
+          {{ user.nombre }} {{ user.apellido }} ({{ user.nickName }})
+        </option>
+      </select>
+    </div>
+
+    <div class="error-message" *ngIf="error">
+      ⚠️ {{ error }}
+    </div>
+
+    <button 
+      class="btn-login" 
+      (click)="login()" 
+      [disabled]="!usuarioSeleccionado || loading">
+      <span *ngIf="!loading">Ingresar</span>
+      <span *ngIf="loading">Cargando...</span>
+    </button>
+
+    <div class="info-box">
+      <h3>Casos de Uso Implementados</h3>
+      <ul>
+        <li><strong>CU0008:</strong> Borrar Mensajes Propios</li>
+        <li><strong>CU0016:</strong> Enviar Correo Automático de Tendencias</li>
+      </ul>
+    </div>
+  </div>
+</div>

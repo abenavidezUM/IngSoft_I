@@ -1,0 +1,50 @@
+h2 {
+  color: #C81D25;
+  margin-bottom: 20px;
+}
+
+.lista {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.lista li {
+  padding: 16px;
+  margin-bottom: 12px;
+  border: 1px solid rgba(191, 215, 234, 0.2);
+  border-radius: 8px;
+  background: rgba(191, 215, 234, 0.05);
+}
+
+.nombre {
+  font-weight: 600;
+  color: #BFD7EA;
+  margin-bottom: 4px;
+}
+
+.nick {
+  color: rgba(191, 215, 234, 0.8);
+  font-size: 14px;
+}
+
+.empty {
+  color: #BFD7EA;
+  margin: 12px 0;
+  text-align: center;
+  padding: 40px;
+}
+
+.info {
+  color: #BFD7EA;
+  margin: 12px 0;
+}
+
+.error {
+  color: #C81D25;
+  margin: 12px 0;
+  padding: 12px;
+  background: rgba(200, 29, 37, 0.1);
+  border-radius: 6px;
+}
+

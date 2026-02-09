@@ -1,0 +1,78 @@
+<section class="tendencias-container">
+  <div class="page-header">
+    <h2>Tendencias</h2>
+    <p class="page-subtitle">CU0016 - Envío Automático de Tendencias · Últimas 24 horas</p>
+  </div>
+
+  <div *ngIf="cargando" class="loading">
+    Cargando tendencias...
+  </div>
+
+  <div *ngIf="error" class="error">
+    {{ error }}
+    <button (click)="cargarTendencias()">Reintentar</button>
+  </div>
+
+  <div *ngIf="!cargando && !error && tendencias.length === 0" class="empty">
+    No hay tendencias disponibles en este momento.
+  </div>
+
+  <ol class="tendencias-lista" *ngIf="tendencias.length > 0">
+    <li *ngFor="let tendencia of tendencias; let i = index" class="tendencia-item">
+      <span class="ranking">#{{ i + 1 }}</span>
+      <div class="tendencia-info">
+        <span class="etiqueta">{{ tendencia.etiqueta }}</span>
+        <span class="count">{{ tendencia.count }} menciones</span>
+      </div>
+      <div class="bar-container">
+        <div 
+          class="bar" 
+          [style.width.%]="(tendencia.count / tendencias[0].count) * 100">
+        </div>
+      </div>
+    </li>
+  </ol>
+
+  <div class="actions" *ngIf="tendencias.length > 0">
+    <button 
+      class="btn-primary" 
+      (click)="enviarEmails()"
+      [disabled]="enviando">
+      {{ enviando ? 'Enviando...' : 'Enviar Emails de Tendencias' }}
+    </button>
+    <button 
+      class="btn-secondary" 
+      (click)="cargarTendencias()"
+      [disabled]="cargando">
+      Actualizar
+    </button>
+  </div>
+
+  <div *ngIf="resultadoEnvio" class="resultado-envio">
+    <h3>Resultado del Envío</h3>
+    <div class="stats">
+      <div class="stat">
+        <span class="stat-label">Total usuarios:</span>
+        <span class="stat-value">{{ resultadoEnvio.data?.estadisticas?.total_usuarios || 0 }}</span>
+      </div>
+      <div class="stat">
+        <span class="stat-label">Emails enviados:</span>
+        <span class="stat-value success">{{ resultadoEnvio.data?.estadisticas?.emails_enviados || 0 }}</span>
+      </div>
+      <div class="stat">
+        <span class="stat-label">Emails fallidos:</span>
+        <span class="stat-value error">{{ resultadoEnvio.data?.estadisticas?.emails_fallidos || 0 }}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="info-box">
+    <h4>Caso de Uso 16</h4>
+    <p>Este módulo permite visualizar las tendencias actuales y enviar emails automáticos a todos los usuarios registrados.</p>
+    <ul>
+      <li>Las tendencias se calculan basándose en las etiquetas más usadas</li>
+      <li>Se analizan los mensajes de las últimas 24 horas</li>
+      <li>Los emails se envían a todos los usuarios con email válido</li>
+    </ul>
+  </div>
+</section>

@@ -1,0 +1,131 @@
+.page-header {
+  background: white;
+  border: 1px solid #dbdbdb;
+  border-radius: 3px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+h2 {
+  color: #262626;
+  margin: 0 0 8px 0;
+  font-size: 24px;
+  font-weight: 700;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+.page-subtitle {
+  color: #8e8e8e;
+  font-size: 14px;
+  margin: 0;
+}
+
+.lista {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 12px 0;
+}
+
+.lista li {
+  padding: 16px;
+  margin-bottom: 12px;
+  border: 1px solid #dbdbdb;
+  border-radius: 3px;
+  background: white;
+}
+
+.mensaje-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.mensaje-contenido {
+  flex: 1;
+}
+
+.texto {
+  margin: 0 0 8px 0;
+  color: #262626;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.fecha {
+  font-size: 12px;
+  color: #8e8e8e;
+}
+
+.empty {
+  color: #8e8e8e;
+  margin: 12px 0;
+  text-align: center;
+  padding: 40px;
+  background: white;
+  border: 1px solid #dbdbdb;
+  border-radius: 3px;
+}
+
+.info {
+  color: #262626;
+  margin: 12px 0;
+}
+
+.error {
+  color: #ed4956;
+  margin: 12px 0;
+  padding: 12px;
+  background: rgba(237, 73, 86, 0.1);
+  border-radius: 3px;
+  border: 1px solid #ed4956;
+}
+
+button {
+  background: #0095f6;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s;
+  font-weight: 600;
+  margin-top: 16px;
+}
+
+button:hover:not(:disabled) {
+  background: #1877f2;
+}
+
+button:disabled {
+  background: #b2dffc;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.btn-borrar {
+  background: transparent;
+  color: #ed4956;
+  border: 1px solid #ed4956;
+  padding: 6px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s;
+  font-weight: 600;
+  margin-top: 0;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.btn-borrar:hover:not(:disabled) {
+  background: #ed4956;
+  color: white;
+}
+
+.btn-borrar:disabled {
+  border-color: #dbdbdb;
+  color: #dbdbdb;
+  cursor: not-allowed;
+}

@@ -1,0 +1,26 @@
+<div class="home-container">
+  <div class="home-card">
+    <h1 class="home-title">Microblogging</h1>
+    <p class="home-subtitle">Bienvenido a la aplicación de mensajería</p>
+    
+    <div class="login-section">
+      <div class="auth-status" *ngIf="authService.isAuthenticated()">
+        <p class="status-message">✅ Ya estás autenticado</p>
+        <p class="status-user">Usuario: {{ authService.getCurrentUser()?.nickName }}</p>
+      </div>
+      
+      <button 
+        class="login-button" 
+        (click)="entrarComoUsuario()"
+        [disabled]="cargando">
+        <span *ngIf="!cargando">Entrar como {{ usuarioNickname }}</span>
+        <span *ngIf="cargando">Cargando...</span>
+      </button>
+      
+      <div class="error-message" *ngIf="error">
+        <p>⚠️ {{ error }}</p>
+      </div>
+    </div>
+  </div>
+</div>
+
