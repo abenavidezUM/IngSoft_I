@@ -36,13 +36,57 @@ h2 {
 
 .mensaje-item {
   display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
+  flex-direction: column;
   gap: 12px;
+  position: relative;
+}
+
+/* Destacar mensajes propios con un borde más visible */
+.mensaje-propio {
+  border-left: 3px solid #0095f6;
+  background: #f8fcff;
+}
+
+.mensaje-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #efefef;
+}
+
+.autor {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.autor strong {
+  color: #262626;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.nombre-completo {
+  color: #8e8e8e;
+  font-size: 12px;
+}
+
+.badge-propio {
+  background: linear-gradient(45deg, #405de6, #5851db, #833ab4, #c13584, #e1306c, #fd1d1d);
+  color: white;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .mensaje-contenido {
   flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .texto {
@@ -111,12 +155,12 @@ button:disabled {
   padding: 6px 16px;
   border-radius: 4px;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 13px;
   transition: all 0.2s;
   font-weight: 600;
-  margin-top: 0;
+  margin-top: 8px;
   white-space: nowrap;
-  flex-shrink: 0;
+  align-self: flex-end;
 }
 
 .btn-borrar:hover:not(:disabled) {
@@ -128,4 +172,22 @@ button:disabled {
   border-color: #dbdbdb;
   color: #dbdbdb;
   cursor: not-allowed;
+}
+
+.btn-cargar-mas {
+  width: 100%;
+  background: white;
+  color: #0095f6;
+  border: 1px solid #dbdbdb;
+  padding: 12px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s;
+  font-weight: 600;
+  margin-top: 0;
+}
+
+.btn-cargar-mas:hover:not(:disabled) {
+  background: #fafafa;
 }

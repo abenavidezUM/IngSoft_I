@@ -1,7 +1,7 @@
 <section>
   <div class="page-header">
-    <h2>Mensajes Propios</h2>
-    <p class="page-subtitle">CU0008 - Borrar Mensajes Propios</p>
+    <h2>Tablón Principal</h2>
+    <p class="page-subtitle">Mensajes de usuarios seguidos y propios - CU0008: Borrar Mensajes Propios</p>
   </div>
 
   <div *ngIf="mensajes.length === 0 && !cargando" class="empty">
@@ -9,12 +9,23 @@
   </div>
 
   <ul class="lista">
-    <li *ngFor="let mensaje of mensajes" class="mensaje-item">
+    <li *ngFor="let mensaje of mensajes" class="mensaje-item" [class.mensaje-propio]="mensaje.esPropio">
+      <div class="mensaje-header">
+        <span class="autor">
+          <strong>@{{ mensaje.autor?.nickName || 'Usuario' }}</strong>
+          <span class="nombre-completo" *ngIf="mensaje.autor">
+            {{ mensaje.autor.nombre }} {{ mensaje.autor.apellido }}
+          </span>
+        </span>
+        <span class="badge-propio" *ngIf="mensaje.esPropio">Tu mensaje</span>
+      </div>
       <div class="mensaje-contenido">
         <p class="texto">{{ mensaje.texto }}</p>
         <span class="fecha">{{ mensaje.fechaDeCreado | date:'short' }}</span>
       </div>
+      <!-- Botón de borrar solo visible para mensajes propios (CU0008) -->
       <button 
+        *ngIf="mensaje.esPropio"
         class="btn-borrar" 
         (click)="borrarMensaje(mensaje.id)"
         [disabled]="estaBoorrando(mensaje.id)"
@@ -24,7 +35,7 @@
     </li>
   </ul>
 
-  <button *ngIf="hayMas" (click)="cargarMensajes()" [disabled]="cargando">
+  <button *ngIf="hayMas" (click)="cargarMensajes()" [disabled]="cargando" class="btn-cargar-mas">
     {{ cargando ? 'Cargando...' : 'Cargar más' }}
   </button>
 </section>

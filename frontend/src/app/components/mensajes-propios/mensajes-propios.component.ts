@@ -22,7 +22,8 @@ export class MensajesPropiosComponent implements OnInit {
 
   cargarMensajes(): void {
     this.cargando = true;
-    this.mensajesService.obtenerMensajesPropios(this.limit, this.offset).subscribe({
+    // Usar el tablón completo (mensajes propios + de seguidos)
+    this.mensajesService.obtenerTablon(this.limit, this.offset).subscribe({
       next: (data) => {
         this.mensajes = [...this.mensajes, ...data.mensajes];
         this.hayMas = data.hasMore;
@@ -30,7 +31,7 @@ export class MensajesPropiosComponent implements OnInit {
         this.cargando = false;
       },
       error: (error) => {
-        console.error('Error al cargar mensajes propios:', error);
+        console.error('Error al cargar tablón:', error);
         this.cargando = false;
       }
     });

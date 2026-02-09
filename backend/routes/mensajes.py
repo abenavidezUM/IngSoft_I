@@ -1,7 +1,8 @@
 """
-Rutas para mensajes públicos (mensajes propios)
+Rutas para mensajes públicos
 
 Endpoints:
+- GET /api/mensajes/tablon - Obtener tablón (mensajes propios + de seguidos)
 - GET /api/mensajes/mios - Obtener mensajes propios
 - DELETE /api/mensajes/<mensaje_id> - Borrar mensaje propio
 """
@@ -10,9 +11,67 @@ from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
 
 from models import Usuario
-from services.mensajes_service import obtener_mis_mensajes, borrar_mensaje
+from services.mensajes_service import obtener_tablon, obtener_mis_mensajes, borrar_mensaje
 
 mensajes_bp = Blueprint("mensajes", __name__)
+
+
+@mensajes_bp.route("/mensajes/tablon", methods=["GET"])
+@jwt_required()
+def obtener_tablon_route():
+    """
+    Obtiene el tablón del usuario: mensajes propios + mensajes de usuarios seguidos.
+    
+    Este es el tablón principal del microblogging según el enunciado:
+    "El usuario podrá visualizar un tablón de anuncios donde irán apareciendo los
+    mensajes de los usuarios a los que sigue y los propios al publicarlos."
+    
+    Returns:
+        200: Lista de mensajes con información del autor y flag 'esPropio'
+        401: Usuario no autenticado
+        500: Error interno
+    """
+    try:
+        usuario_id = get_jwt_identity()
+        print(f"🔑 Obteniendo tablón para usuario: {usuario_id}")
+        
+        from utils.mongo_helpers import get_usuario_by_id
+        usuario = get_usuario_by_id(usuario_id)
+        
+        if not usuario:
+            print(f"❌ Usuario no encontrado: {usuario_id}")
+            return jsonify({
+                "success": False,
+                "error": "Usuario no encontrado",
+                "code": "USER_NOT_FOUND",
+            }), 401
+        
+        limit = int(request.args.get("limit", 20))
+        offset = int(request.args.get("offset", 0))
+        
+        mensajes, total = obtener_tablon(usuario, limit, offset)
+        
+        # Convertir mensajes a lista
+        mensajes_list = list(mensajes)
+        
+        return jsonify({
+            "success": True,
+            "data": {
+                "mensajes": [mensaje.to_dict() for mensaje in mensajes_list],
+                "total": total,
+                "limit": limit,
+                "offset": offset,
+                "hasMore": (offset + limit) < total,
+            }
+        }), 200
+    except Exception as e:
+        import traceback
+        traceback.print_exc()
+        return jsonify({
+            "success": False,
+            "error": f"Error al obtener tablón: {str(e)}",
+            "code": "INTERNAL_ERROR",
+        }), 500
 
 
 @mensajes_bp.route("/mensajes/mios", methods=["GET"])
