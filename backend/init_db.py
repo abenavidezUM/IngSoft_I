@@ -268,20 +268,19 @@ def main():
     
     # Crear colecciones e índices
     if not create_collections():
-        disconnect()
         sys.exit(1)
     
     # Insertar datos de prueba si se solicita
     if args.with_sample_data:
         if not insert_sample_data():
-            disconnect()
+            # No desconectar aquí, dejar que Python lo maneje al finalizar
             sys.exit(1)
     else:
         print("\n💡 Para insertar datos de prueba, ejecuta:")
         print("   python init_db.py --with-sample-data")
     
-    # Desconectar
-    disconnect()
+    # No desconectar inmediatamente para asegurar que los datos se escriban
+    # La conexión se cerrará automáticamente al finalizar el script
     print("\n" + "=" * 60)
     print("✅ Proceso completado exitosamente")
     print("🎉 La base de datos está lista para usar")

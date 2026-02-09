@@ -33,7 +33,6 @@ def obtener_tablon_route():
     """
     try:
         usuario_id = get_jwt_identity()
-        print(f"🔑 Obteniendo tablón para usuario: {usuario_id}")
         
         from utils.mongo_helpers import get_usuario_by_id
         usuario = get_usuario_by_id(usuario_id)

@@ -29,34 +29,23 @@ def obtener_tablon(usuario, limit=50, offset=0):
         except:
             usuario_oid = usuario_id
         
-        print(f"🔍 Obteniendo tablón para usuario: {usuario_oid}")
-        
         # Obtener el documento del usuario para ver a quiénes sigue
         usuario_doc = db.usuarios.find_one({'_id': usuario_oid})
         if not usuario_doc:
-            print(f"❌ Usuario no encontrado: {usuario_oid}")
             return [], 0
         
-        # Obtener IDs de usuarios seguidos
         siguiendo_ids = usuario_doc.get('siguiendo', [])
-        print(f"📋 Usuario sigue a {len(siguiendo_ids)} usuarios")
-        
-        # Crear lista de autores: usuario + seguidos
         autores_ids = [usuario_oid] + siguiendo_ids
-        print(f"📊 Total de autores a buscar: {len(autores_ids)}")
         
-        # Buscar mensajes públicos de esos autores
+        # Buscar mensajes de esos autores
         mensajes_docs = list(
             db.mensajes.find({
-                'autor': {'$in': autores_ids},
-                'esPublico': True
+                'autor': {'$in': autores_ids}
             })
             .sort('fechaDeCreado', -1)
             .skip(offset)
             .limit(limit)
         )
-        
-        print(f"📨 Encontrados {len(mensajes_docs)} mensajes en el tablón")
         
         # Crear objetos de mensaje con información adicional
         mensajes = []
@@ -93,32 +82,23 @@ def obtener_tablon(usuario, limit=50, offset=0):
                                 'nombre': self.autor_nombre,
                                 'apellido': self.autor_apellido
                             },
-                            'etiquetas': self.etiquetas,
-                            'menciones': self.menciones,
+                            'etiquetas': [str(e) if hasattr(e, '__str__') else e for e in (self.etiquetas or [])],
+                            'menciones': [str(m) if hasattr(m, '__str__') else m for m in (self.menciones or [])],
                             'esPropio': self.esPropio
                         }
                 
                 mensaje = MensajeTablon(doc, autor_doc, usuario_oid)
                 mensajes.append(mensaje)
-                print(f"✅ Mensaje de @{mensaje.autor_nickName}: {mensaje.texto[:30]}... (propio: {mensaje.esPropio})")
             except Exception as e:
-                print(f"⚠️ Error al convertir mensaje {doc.get('_id')}: {e}")
-                import traceback
-                traceback.print_exc()
                 continue
         
         # Contar total
         total = db.mensajes.count_documents({
-            'autor': {'$in': autores_ids},
-            'esPublico': True
+            'autor': {'$in': autores_ids}
         })
-        print(f"📊 Total de mensajes en el tablón: {total}")
         
         return mensajes, total
     except Exception as e:
-        import traceback
-        traceback.print_exc()
-        print(f"Error en obtener_tablon: {e}")
         return [], 0
 
 
@@ -141,17 +121,13 @@ def obtener_mis_mensajes(usuario, limit=50, offset=0):
         except:
             autor_oid = autor_id
         
-        print(f"🔍 Buscando mensajes para autor_oid: {autor_oid}")
-        
         # Buscar mensajes con pymongo
         mensajes_docs = list(
-            db.mensajes.find({'autor': autor_oid, 'esPublico': True})
+            db.mensajes.find({'autor': autor_oid})
             .sort('fechaDeCreado', -1)
             .skip(offset)
             .limit(limit)
         )
-        
-        print(f"📊 Encontrados {len(mensajes_docs)} mensajes en BD")
         
         # Crear objetos simples con los campos necesarios
         mensajes = []
@@ -178,22 +154,14 @@ def obtener_mis_mensajes(usuario, limit=50, offset=0):
                 
                 mensaje = MensajeSimple(doc)
                 mensajes.append(mensaje)
-                print(f"✅ Mensaje agregado: {mensaje.id[:8]}... - {mensaje.texto[:30]}...")
             except Exception as e:
-                print(f"⚠️ Error al convertir mensaje {doc.get('_id')}: {e}")
-                import traceback
-                traceback.print_exc()
                 continue
         
         # Contar total
-        total = db.mensajes.count_documents({'autor': autor_oid, 'esPublico': True})
-        print(f"📊 Total de mensajes públicos del usuario: {total}")
+        total = db.mensajes.count_documents({'autor': autor_oid})
         
         return mensajes, total
     except Exception as e:
-        import traceback
-        traceback.print_exc()
-        print(f"Error en obtener_mis_mensajes: {e}")
         return [], 0
 
 
@@ -245,8 +213,5 @@ def borrar_mensaje(usuario, mensaje_id):
             return False, "Error al borrar el mensaje", 500
             
     except Exception as e:
-        import traceback
-        traceback.print_exc()
-        print(f"Error en borrar_mensaje: {e}")
         return False, f"Error interno al borrar el mensaje: {str(e)}", 500
 
