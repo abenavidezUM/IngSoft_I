@@ -12,7 +12,7 @@
     <li *ngFor="let mensaje of mensajes" class="mensaje-item" [class.mensaje-propio]="mensaje.esPropio">
       <div class="mensaje-header">
         <span class="autor">
-          <strong>@{{ mensaje.autor?.nickName || 'Usuario' }}</strong>
+          <strong>{{ '@' + (mensaje.autor?.nickName || 'Usuario') }}</strong>
           <span class="nombre-completo" *ngIf="mensaje.autor">
             {{ mensaje.autor.nombre }} {{ mensaje.autor.apellido }}
           </span>
