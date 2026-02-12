@@ -165,7 +165,7 @@ def generar_contenido_email(tendencias):
     <body>
         <div class="header">
             <h1 style="margin: 0;">🔥 Temas del Momento</h1>
-            <p style="margin: 5px 0 0 0;">Las tendencias más populares en nuestra red social</p>
+            <p style="margin: 5px 0 0 0;">Las tendencias más populares en nuestro microblogging</p>
         </div>
         
         <div class="content">

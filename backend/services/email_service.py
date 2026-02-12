@@ -25,7 +25,7 @@ def enviar_email_tendencias(mail, usuario_email, usuario_nombre, contenido_html)
     try:
         # Crear mensaje
         msg = Message(
-            subject='🔥 Temas del Momento - Tendencias de la Red Social',
+            subject='🔥 Temas del Momento - Tendencias del Microblogging',
             recipients=[usuario_email],
             html=contenido_html,
             sender=current_app.config.get('MAIL_DEFAULT_SENDER', 'noreply@app.com')
